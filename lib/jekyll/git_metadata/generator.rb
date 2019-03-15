@@ -105,6 +105,7 @@ module Jekyll
         long_sha, author_name, author_email, author_date, commit_name, commit_email, commit_date, message, changed_files = result.scan(/commit (.*)\nAuthor:(.*)<(.*)>\nAuthorDate:(.*)\nCommit:(.*)<(.*)>\nCommitDate:(.*)\n\n((?:\s\s\s\s[^\r\n]*\n)*)\n(.*)/m).first.map(&:strip)
         previous = %x{ git describe #{sha} --always }
         previous_version = /v(\d+\.)?(\d+\.)?(\*|\d+)/.match(previous).to_s
+        commits_since_previous_version = /(?<=\-)(\d+)?(?=\-)/.match(previous).to_s
         contains = %x{ git describe --contains #{sha} --always }
         containing_version = /v(\d+\.)?(\d+\.)?(\*|\d+)/.match(contains).to_s
 
@@ -120,7 +121,8 @@ module Jekyll
           'message' => message.gsub(/    /, ''),
           'changed_files' => changed_files.split("\n"),
           'previous_version' => previous_version,
-          'containing_version' => containing_version
+          'containing_version' => containing_version,
+          'commits_since_previous_version' => commits_since_previous_version
         }
       end
 
