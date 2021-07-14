@@ -53,7 +53,6 @@ module Jekyll
 
       def site_data
         {
-          'project_name' => project_name,
           'branch_name' => branch_name,
           'files_count' => files_count,
         }.merge!(page_data)
@@ -131,10 +130,6 @@ module Jekyll
         @tracked_files ||= %x{ git ls-tree --full-tree -r --name-only HEAD }.split("\n")
       end
 
-      def project_name
-        File.basename(%x{ git rev-parse --show-toplevel }.strip)
-      end
-      
       def branch_name
         File.basename(%x{ git branch --show-current }.strip)
       end
