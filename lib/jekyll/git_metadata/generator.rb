@@ -31,6 +31,10 @@ module Jekyll
         FileUtils.mkdir_p(cache_dir) unless File.directory?(cache_dir)
         cache_file = cache_dir + "/#{current_sha}.json"
 
+        if File.exist?(cache_file)
+          return JSON.parse(IO.read(cache_file))
+        end
+
         pages_data = {}
         jekyll_items(site).each do |page|
           if page.is_a?(Jekyll::Page)
